@@ -3,5 +3,7 @@ This repository contains the code of an algorithm developed at UW-Madison by C. 
 
 The paper that presents this novel algorithm is:
 
-C. Hinrichs*, V. K. Ithapu*, Q. Sun, V. Singh, S. C. Johnson, Speeding up Permutation Testing in Neuroimaging, Neural Information Processing Systems (NIPS), 2013 
+C. Hinrichs, V. K. Ithapu, Q. Sun, V. Singh, S. C. Johnson, Speeding up Permutation Testing in Neuroimaging, Neural Information Processing Systems (NIPS), 2013.
+
+Where the first authors are Hinrichs and Itapu.
 
