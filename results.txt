@@ -1,0 +1,7 @@
+Loading matrices time:
+
+It took me 60557185 clicks (60.5572 seconds) to load matlab matrices in C++ with armadillo.
+It took me 527427 clicks (0.527427 seconds) to load armadillo matrices in C++ with armadillo.
+
+It took me 73486293 clicks (73.4863 seconds) to load matlab matrices in C++ with armadillo.
+It took me 1320786 clicks (1.32079 seconds) to load armadillo matrices in C++ with armadillo.

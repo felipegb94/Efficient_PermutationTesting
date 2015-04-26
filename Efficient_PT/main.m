@@ -1,6 +1,6 @@
 % Possible matrices: adrc, merit, predict
 % These contain an N x V matrix (data) and a 1xN Label Vector
-matrixName = 'adrc'; 
+matrixName = 'merit'; 
 load(strcat('pt_data/Data_', matrixName, '.mat'));
 
 % N = Number of patients. ~ 50 

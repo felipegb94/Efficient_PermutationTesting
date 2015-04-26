@@ -197,7 +197,7 @@ end
 tEnd_Total = toc(tStart_Total);
 save('./timing/t_Total', 'tEnd_Total');
 
-save(sprintf('%s/outputs.mat',save_path),'W','U_hat','maxnull', 'tEnd_Total','t_Training','t_Recovery');
+save(sprintf('%s/outputs.mat',save_path),'outputs', 'tEnd_Total','t_Training','t_Recovery');
 fprintf('\n Outputs saved to output.mat .. DONE \n');
 
 %% END
