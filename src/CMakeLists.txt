@@ -1,0 +1,4 @@
+project(Efficient_PermutationTesting CXX)
+
+
+add_executable(Efficient_PT Efficient_PermutationTesting.cpp)
