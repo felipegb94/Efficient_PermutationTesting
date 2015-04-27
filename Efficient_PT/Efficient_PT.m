@@ -85,7 +85,7 @@ OPTIONS.RANK         =      maxrank; %% (from inputs)
 OPTIONS.rho          =      2;   
 OPTIONS.ITER_MAX     =      iter; %% (from inputs)  
 OPTIONS.ITER_MIN     =      OPTIONS.ITER_MAX;   
-OPTIONS.USE_MEX      =      0;    
+OPTIONS.USE_MEX      =      1;    
 OPTIONS.TOL          =      1e-8; 
 %
 OPTS2.RHO            =      OPTIONS.rho;  
