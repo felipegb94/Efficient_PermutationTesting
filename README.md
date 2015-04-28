@@ -35,8 +35,11 @@ In this section I will first explain what Multiple Hypothesis Testing is and how
 
 
 #### Multiple Hypothesis Testing
-Suppose we have a group of n patients, and we are testing a new drug to treat some neurodegenerative disorder. A subset *A* of those patients was administered a drug and the rest of the subjects (subset *B*), were not administered the drug. Now the question Multiple Hypothesis Testing wants to answer is: 
+Suppose we have a group of n patients, and we are testing a new drug to treat some neurodegenerative disorder. A subset *A* of those patients was administered a drug and the rest of the subjects (subset *B*), were not administered the drug. From each subject some kind of neuroimaging data is collected. In our case we are interested in FMRI data, so the data we collect are voxels (a 3D pixel) where some kind of measurement was made. These measurements can be things like: gray matter density, longitudinal deformation, metabolism, etc. 
+
+Now the question Multiple Hypothesis Testing wants to answer is: 
 > Is there any significant change in the neuroimaging data from group A and group B?
+
 
 
 #### Permutation Testing vs. The Bonferroni Correction
