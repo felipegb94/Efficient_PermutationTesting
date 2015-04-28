@@ -33,9 +33,17 @@ For this setup I am assuming the Mac OSX machine have the package manager [homeb
 ### Theory
 In this section I will first explain what Multiple Hypothesis Testing is and how it fits in the context of neuroimaging. Then I will introduct the two existing techniques that are used to perform  Multiple Hypothesis Testing (The Bonferroni Correction and Permutation Testing) and why it does not make sense to use the Bonferroni Correction in the problem we are trying to solve. Thirdly, I will outline the problems faced when trying to perform Permutation Testing. Finally I will introduce the idea behind Efficient Permutation Testing and how this new algorithm overcomes some of the problems that come together with the usual Permutation Testing algorithm. 
 
+
 #### Multiple Hypothesis Testing
+
 #### Permutation Testing vs. The Bonferroni Correction
 #### Drawbacks of Permuation Testing
 #### Efficient Permutation Testing Algorithm
+
+#### Definitions:
+* **Null Hypothesis:**In a clinical study of new drug, accepting the null hypothesis means that there was no significant difference between the group that took the drug and the group that did not take the drug. 
+* **Type I Error:** Rejecting the Null hypothesis even though it is true. This kind of error is also known as *False Positive*.
+* **t-statistic:** T-statistics or test-statistics
+
 
 
