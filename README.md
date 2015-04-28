@@ -56,6 +56,8 @@ Permutation Testing and the Bonferroni Correction are the two most well known me
 #### Drawbacks 
 1. Bonferroni Correction: 
 2. Permutation Testing:
+
+
 #### Efficient Permutation Testing Algorithm
 
 #### Definitions:
