@@ -121,7 +121,12 @@ t_Training_Start = tic;
 fprintf('\n Training for low rank subspace and residual priors \n');
 %
 labels_current = labels_IN(1:1:train_num,:);
+t_Permutation = tic;
 T_current = perm_tests(Data,labels_current,N_gp1);
+t_Permutation = toc(t_Permutation);
+disp(strcat('time for perm_tests: ',t_Permutation));
+save('./timing/t_Permutation.mat', 't_Permutation');
+
 %
 frames_order = zeros(train_num,maxCycles);
 for m = 1:1:maxCycles
