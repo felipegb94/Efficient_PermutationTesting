@@ -201,31 +201,32 @@ int main()
 	std::cout << "rows: " << labels_current.n_rows << std::endl;  // .n_rows and .n_cols are read only
 	std::cout << "cols: " << labels_current.n_cols << std::endl;
 
-	t_tstat = clock();
-	perm_tests(data, labels_current, N_group1);
-	t_tstat = clock() - t_tstat;
+	// t_tstat = clock();
+	// arma::mat T_current = perm_tests(data, labels_current, N_group1);
+	// t_tstat = clock() - t_tstat;
+	// std::cout << "rows T: " << T_current.n_rows << std::endl;  // .n_rows and .n_cols are read only
+	// std::cout << "cols T : " << T_current.n_cols << std::endl;
 
-  	std::cout << "It took me " << t_tstat << " clicks ("<< ((float)t_tstat)/CLOCKS_PER_SEC << " seconds) to do 100  permutations." << std::endl;
+ //  	std::cout << "It took me " << t_tstat << " clicks ("<< ((float)t_tstat)/CLOCKS_PER_SEC << " seconds) to do 100  permutations." << std::endl;
 
-// 	labels_current = labels_IN(1:1:train_num,:);
-// T_current = perm_tests(Data,labels_current,N_gp1);
-// %
-// frames_order = zeros(train_num,maxCycles);
-// for m = 1:1:maxCycles
-//     frames_order(:,m) = randperm(train_num);
-// end
+  	arma::mat frames_order = arma::zeros(train_time, max_cycles);
+  	arma::mat train_time_interval = interval(0, train_time-1, 1, false);
+  	for(int i = 0; i < max_cycles; i++){
+  		frames_order(arma::span::all, i) = arma::shuffle(train_time_interval);
+  	}
+  	frames_order.print();
+
+  	arma::mat U_hat;
+  	arma::mat R;
+  	arma::vec s;
+  	arma::mat X = arma::randn(V, max_rank);
+  	arma::svd_econ(U_hat, s, R,  X);
+
+  	// arma::mat U_hat = arma
+
+  	// U_hat = orth(randn(V,OPTIONS.RANK)); 
 
 
-
-
-
-
-// %
-// sub_V = round(sub*V); %% number of samples used per permutation
-// sub_batch = train_num; %% number of permutationshandled at once -- for commputational ease
-// batches = ceil(trials/sub_batch); %% number of such batches
-// max_batches = zeros(1,trials); %% estimated max statistics for all permutations
-// %bin_shifts = 0:1:20; %% number of bin shifts for searching the residual bias (training)
 
 
 	return 0;

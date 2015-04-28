@@ -12,3 +12,4 @@ Permutation Tests for Training:
 
 It took me 53511778 clicks (53.5118 seconds) to do 100  permutations. In C++ with armadillo and my own t_stat function
 
+It took  287.1930 secs to do 100 permutations
