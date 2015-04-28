@@ -42,14 +42,13 @@ Now the question Multiple Hypothesis Testing wants to answer is:
 
 But, why is answering this question tricky? Well for each voxel we will have to calculate a t-statistic. Assume there are 600k thousand voxel measurement per patient, which is a reasonable number in fmri data. Therefore we will have 600k t-statistics. So we have 600k hypothesis to test, and let's assume that we have a significance level of 0.05 (`P(making an error) = 0.05`). Then we have:
 
-      > P(at least one significant result) = 1 - P(no significant result)
-                                           = 1 - (1 - 0.05)^600,000
-                                           = 1 - (very small number)
-                                           = 1
+                        P(Making and error) = 0.05
+                        P(Not making an error) = 1- 0.05 = 0.95
+                        P(Not making an error in 600k tests) = (0.95)^600k = very small = 0
+                        P(Of making at least one error in 600k test) = 1 - P(Not making an error in 600k tests)
+                                                                     = 1
 
-The calculation above tells us that there is ~100 percent chance that we will see at least one significant result. This means that the probability of getting a significant result due to chance is very large.
-
-
+The calculation above tells us that there is ~100 percent that there will be at least one error. In other words, if we assume the Null Hypothesis is true, then there is 100 percent chance that we will see at least one significant result simply due to chance. Therefore, we want to find a way to control this kind of mistakes which are the number of False Positives.
 
 #### Permutation Testing vs. The Bonferroni Correction
 #### Drawbacks of Permuation Testing
