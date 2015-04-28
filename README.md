@@ -51,7 +51,11 @@ But, why is answering this question tricky? Well for each voxel we will have to 
 The calculation above tells us that there is ~100 percent that there will be at least one error. In other words, if we assume the Null Hypothesis is true, then there is 100 percent chance that we will see at least one significant result simply due to chance. Therefore, we want to find a way to control this kind of mistakes which are the number of False Positives.
 
 #### Permutation Testing vs. The Bonferroni Correction
-#### Drawbacks of Permuation Testing
+Permutation Testing and the Bonferroni Correction are the two most well known methods to correct for False positives.
+
+#### Drawbacks 
+1. Bonferroni Correction: 
+2. Permutation Testing:
 #### Efficient Permutation Testing Algorithm
 
 #### Definitions:
