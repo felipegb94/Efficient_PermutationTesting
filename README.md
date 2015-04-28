@@ -8,10 +8,16 @@ C. Hinrichs, V. K. Ithapu, Q. Sun, V. Singh, S. C. Johnson, Speeding up Permutat
 
 Where the first authors are Hinrichs and Itapu.
 
-The package also makes use of the matrix completion code (GRASTA) developed by Jun He et al., which can be obtained here:
+All code under `Efficiend_PT/` was developed by the authors of the paper. Everything under `src/` is my own C++ implementation of the Efficient_PT algorithm.
+
+#### Dependencies
+
+* The package also makes use of the matrix completion code (GRASTA) developed by Jun He et al., which can be obtained here:
 https://sites.google.com/site/hejunzz/grasta
 
-All code under `Efficiend_PT/` was developed by the authors of the paper. Everything under `src/` is my own C++ implementation of the Efficient_PT algorithm.
+* The C++ version of the code relies on the C++ linear algebra library Armadillo: 
+
+Conrad Sanderson. Armadillo: An Open Source C++ Linear Algebra Library for Fast Prototyping and Computationally Intensive Experiments. Technical Report, NICTA, 2010.
 
 ## CS 766: Computer Vision - Final Project
 
