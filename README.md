@@ -35,6 +35,9 @@ In this section I will first explain what Multiple Hypothesis Testing is and how
 
 
 #### Multiple Hypothesis Testing
+Suppose we have a group of n patients, and we are testing a new drug to treat some neurodegenerative disorder. A subset *A* of those patients was administered a drug and the rest of the subjects (subset *B*), were not administered the drug. Now the question Multiple Hypothesis Testing wants to answer is: 
+> Is there any significant change in the neuroimaging data from group A and group B?
+
 
 #### Permutation Testing vs. The Bonferroni Correction
 #### Drawbacks of Permuation Testing
