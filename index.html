@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Efficient permutationtesting by felipegb94</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Efficient permutationtesting</h1>
+      <h2 class="project-tagline">Algorithm that performs Permutation Testing efficiently. Developed at UW-Madison</h2>
+      <a href="https://github.com/felipegb94/Efficient_PermutationTesting" class="btn">View on GitHub</a>
+      <a href="https://github.com/felipegb94/Efficient_PermutationTesting/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/felipegb94/Efficient_PermutationTesting/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="efficient_permutationtesting" class="anchor" href="#efficient_permutationtesting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Efficient_PermutationTesting</h1>
+
+<p>This repository contains the code of an algorithm developed at UW-Madison by C. Hinrichs<em>, V. K. Ithapu</em>, Q. Sun, V. Singh and S. C. Johnson, that performs Permutation Testing efficiently. The research behind this algorithm can all be found here: <a href="http://pages.cs.wisc.edu/%7Evamsi/pt_fast.html">http://pages.cs.wisc.edu/~vamsi/pt_fast.html</a></p>
+
+<p>The paper that presents this novel algorithm is:</p>
+
+<p>C. Hinrichs, V. K. Ithapu, Q. Sun, V. Singh, S. C. Johnson, Speeding up Permutation Testing in Neuroimaging, Neural Information Processing Systems (NIPS), 2013.</p>
+
+<p>Where the first authors are Hinrichs and Itapu.</p>
+
+<p>All code under <code>Efficiend_PT/</code> was developed by the authors of the paper. Everything under <code>src/</code> is my own C++ implementation of the Efficient_PT algorithm.</p>
+
+<h4>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h4>
+
+<ul>
+<li><p>The package also makes use of the matrix completion code (GRASTA) developed by Jun He et al., which can be obtained here:
+<a href="https://sites.google.com/site/hejunzz/grasta">https://sites.google.com/site/hejunzz/grasta</a></p></li>
+<li><p>The C++ version of the code relies on the C++ linear algebra library Armadillo: </p></li>
+</ul>
+
+<p>Conrad Sanderson. Armadillo: An Open Source C++ Linear Algebra Library for Fast Prototyping and Computationally Intensive Experiments. Technical Report, NICTA, 2010.</p>
+
+<h2>
+<a id="cs-766-computer-vision---final-project" class="anchor" href="#cs-766-computer-vision---final-project" aria-hidden="true"><span class="octicon octicon-link"></span></a>CS 766: Computer Vision - Final Project</h2>
+
+<p>For my Computer Vision final project I will be cleaning up the code presented by Ithapu, et al. (2013), and re-implementing the computational intensive parts of the algorithm in C++.</p>
+
+<h3>
+<a id="setup-mac-osx" class="anchor" href="#setup-mac-osx" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setup Mac OSX</h3>
+
+<p>For this setup I am assuming the Mac OSX machine have the package manager <a href="http://brew.sh/">homebrew</a> installed. I'm  using the CMake GUI so if you which need</p>
+
+<ol>
+<li>Install <a href="http://www.cmake.org/download/">cmake</a>. Follow the instructions. </li>
+<li>Install <a href="http://arma.sourceforge.net/download.html#macos">armadillo</a> (C++ linear algebra library): <code>brew install armadillo</code>
+</li>
+<li>Open the CMake GUI and set your source to <code>PATH_TO_Efficient_PERMUTATIONTESTING_FOLDER/src</code> and build directory to whichever directory you want the binaries to go to. Click on configure, and then generate.</li>
+</ol>
+
+<h3>
+<a id="theory" class="anchor" href="#theory" aria-hidden="true"><span class="octicon octicon-link"></span></a>Theory</h3>
+
+<p>In this section I will first explain what Multiple Hypothesis Testing is and how it fits in the context of neuroimaging. Then I will introduct the two existing techniques that are used to perform  Multiple Hypothesis Testing (The Bonferroni Correction and Permutation Testing) and why it does not make sense to use the Bonferroni Correction in the problem we are trying to solve. Thirdly, I will outline the problems faced when trying to perform Permutation Testing. Finally I will introduce the idea behind Efficient Permutation Testing and how this new algorithm overcomes some of the problems that come together with the usual Permutation Testing algorithm. </p>
+
+<h4>
+<a id="multiple-hypothesis-testing" class="anchor" href="#multiple-hypothesis-testing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Multiple Hypothesis Testing</h4>
+
+<p>Suppose we have a group of n patients, and we are testing a new drug to treat some neurodegenerative disorder. A subset <em>A</em> of those patients was administered a drug and the rest of the subjects (subset <em>B</em>), were not administered the drug. From each subject some kind of neuroimaging data is collected. In our case we are interested in FMRI data, so the data we collect are voxels (a 3D pixel) where some kind of measurement was made. These measurements can be things like: gray matter density, longitudinal deformation, metabolism, etc. </p>
+
+<p>Now the question Multiple Hypothesis Testing wants to answer is: </p>
+
+<blockquote>
+<p>Is there any significant change in the neuroimaging data from group A and group B?</p>
+</blockquote>
+
+<h4>
+<a id="permutation-testing-vs-the-bonferroni-correction" class="anchor" href="#permutation-testing-vs-the-bonferroni-correction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Permutation Testing vs. The Bonferroni Correction</h4>
+
+<h4>
+<a id="drawbacks-of-permuation-testing" class="anchor" href="#drawbacks-of-permuation-testing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Drawbacks of Permuation Testing</h4>
+
+<h4>
+<a id="efficient-permutation-testing-algorithm" class="anchor" href="#efficient-permutation-testing-algorithm" aria-hidden="true"><span class="octicon octicon-link"></span></a>Efficient Permutation Testing Algorithm</h4>
+
+<h4>
+<a id="definitions" class="anchor" href="#definitions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Definitions:</h4>
+
+<ul>
+<li>
+<strong>Null Hypothesis:</strong>In a clinical study of new drug, accepting the null hypothesis means that there was no significant difference between the group that took the drug and the group that did not take the drug. </li>
+<li>
+<strong>Type I Error:</strong> Rejecting the Null hypothesis even though it is true. This kind of error is also known as <em>False Positive</em>.</li>
+<li>
+<strong>t-statistic:</strong> T-statistics or test-statistics</li>
+</ul>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/felipegb94/Efficient_PermutationTesting">Efficient permutationtesting</a> is maintained by <a href="https://github.com/felipegb94">felipegb94</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
+
