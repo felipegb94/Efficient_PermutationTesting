@@ -40,7 +40,14 @@ Suppose we have a group of n patients, and we are testing a new drug to treat so
 Now the question Multiple Hypothesis Testing wants to answer is: 
 > Is there any significant change in the neuroimaging data from group A and group B?
 
-But, why is answering this question tricky? 
+But, why is answering this question tricky? Well for each voxel we will have to calculate a t-statistic. Assume there are 600k thousand voxel measurement per patient, which is a reasonable number in fmri data. Therefore we will have 600k t-statistics. So we have 600k hypothesis to test, and let's assume that we have a significance level of 0.05 (`P(making an error) = 0.05`). Then we have:
+
+      > P(at least one significant result) = 1 - P(no significant result)
+                                           = 1 - (1 - 0.05)^600,000
+                                           = 1 - (very small number)
+                                           = 1
+
+The calculation above tells us that there is ~100 percent chance that we will see at least one significant result. This means that the probability of getting a significant result due to chance is very large.
 
 
 
@@ -53,5 +60,8 @@ But, why is answering this question tricky?
 * **Type I Error:** Rejecting the Null hypothesis even though it is true. This kind of error is also known as *False Positive*.
 * **t-statistic:** T-statistics or test-statistics
 
+### References:
 
+[http://www.stat.berkeley.edu/~mgoldman/Section0402.pdf]
+[http://www.gs.washington.edu/academics/courses/akey/56008/lecture/lecture10.pdf]
 
