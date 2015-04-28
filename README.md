@@ -40,6 +40,8 @@ Suppose we have a group of n patients, and we are testing a new drug to treat so
 Now the question Multiple Hypothesis Testing wants to answer is: 
 > Is there any significant change in the neuroimaging data from group A and group B?
 
+But, why is answering this question tricky? 
+
 
 
 #### Permutation Testing vs. The Bonferroni Correction
