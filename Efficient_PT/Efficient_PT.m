@@ -172,6 +172,7 @@ save('./timing/t_Training', 't_Training');
 save('../Recovery_Inputs/labels_IN_merit_matlab.mat','labels_IN', '-ascii');
 save('../Recovery_Inputs/U_hat_merit_matlab.mat','U_hat', '-ascii');
 save('../Recovery_Inputs/T_current_merit_matlab.mat','T_current', '-ascii');
+save('../Recovery_Inputs/mu_fit_merit_matlab.mat','mu_fit', '-ascii');
 
 %% Recovery : Filling in W and residuals for all trials
 fprintf('\n Recovering the subspace coefficients and residuals for all permutations \n');
@@ -190,7 +191,8 @@ for c = 1:1:batches
         %
         W{t,1} = w; 
         t = t + 1;
-        s_all = zeros(V,1); s_all(inds) = s_all(inds) + s; 
+        s_all = zeros(V,1); 
+        s_all(inds) = s_all(inds) + s; 
         T_rec = U_hat*w + s_all + mu_fit;
         %
         max_batches(1,(c-1)*sub_batch+frame_num) = max(T_rec);

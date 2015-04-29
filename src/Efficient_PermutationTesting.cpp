@@ -320,6 +320,7 @@ int main()
 
 	arma::mat U_hat;
 	arma::mat T_current;
+	arma::mat mu_fit;
 
 	bool status_U = U_hat.load("/Users/felipegb94/repos/Efficient_PermutationTesting/Recovery_Inputs/U_hat_merit_arma.mat");
 	//U_hat.save("/Users/felipegb94/repos/Efficient_PermutationTesting/Recovery_Inputs/U_hat_merit_arma.mat", arma::arma_binary);
@@ -327,6 +328,8 @@ int main()
 	//T_current.save("/Users/felipegb94/repos/Efficient_PermutationTesting/Recovery_Inputs/T_current_merit_arma.mat", arma::arma_binary);
 	bool status_labels = labels_IN.load("/Users/felipegb94/repos/Efficient_PermutationTesting/Recovery_Inputs/labels_IN_merit_arma.mat");
 	//labels_IN.save("/Users/felipegb94/repos/Efficient_PermutationTesting/Recovery_Inputs/labels_IN_merit_arma.mat", arma::arma_binary);
+	bool status_mu_fit = mu_fit.load("/Users/felipegb94/repos/Efficient_PermutationTesting/Recovery_Inputs/mu_fit_merit_arma.mat");
+	//mu_fit.save("/Users/felipegb94/repos/Efficient_PermutationTesting/Recovery_Inputs/mu_fit_merit_arma.mat", arma::arma_binary);
 
 	arma::mat W = arma::zeros(data.n_rows, trials);
 	int t = 0;
@@ -370,11 +373,11 @@ int main()
 
 			arma::mat s_all = arma::zeros(V, 1);
 			s_all.rows(inds) = s_all.rows(inds) + s; // AWESOME ARMADILLO
-			arma::mat T_rec = (U_hat*w) + (s_all) + (mu_fit);
-        //T_rec = U_hat*w + s_all + mu_fit;
 
-
-
+			s_all.each_row() += mu_fit;
+			arma::mat T_rec = (U_hat*w) + (s_all);
+			
+       		max_batches(0,(c)*sub_batch) = T_rec.max();
 
 			std::cout << "Completion done on trial " << ((c)*sub_batch) + frame_num << "/" << trials << " block = " << c << std::endl;
    
