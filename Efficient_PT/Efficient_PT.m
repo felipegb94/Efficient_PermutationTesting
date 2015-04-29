@@ -134,10 +134,12 @@ for m = 1:1:maxCycles
 end
 %
 U_hat = orth(randn(V,OPTIONS.RANK)); 
-%
+% Estimate U using subsample matrix completion methods
 for m = 1:1:maxCycles
    for f = 1:1:train_num
-       r = randperm(V); inds = r(1:sub_V)'; I_inds = T_current(frames_order(f,m),inds)';
+       r = randperm(V); 
+       inds = r(1:sub_V)'; 
+       I_inds = T_current(frames_order(f,m),inds)';
        [U_hat, status, OPTS] = grasta_stream(I_inds, inds, U_hat, status, OPTIONS, OPTS);
        fprintf('Subspace estimation on %s cycle with %s frame \n',num2str(m),num2str(f));
    end
@@ -165,6 +167,12 @@ end
 t_Training = toc(t_Training_Start);
 save('./timing/t_Training', 't_Training');
 
+%% Save Inputs for Recovery
+% -ascii flag need to be able to load matrices in armadillo
+save('../Recovery_Inputs/labels_IN_merit_matlab.mat','labels_IN', '-ascii');
+save('../Recovery_Inputs/U_hat_merit_matlab.mat','U_hat', '-ascii');
+save('../Recovery_Inputs/T_current_merit_matlab.mat','T_current', '-ascii');
+
 %% Recovery : Filling in W and residuals for all trials
 fprintf('\n Recovering the subspace coefficients and residuals for all permutations \n');
 t_Recovery_Start = tic;
@@ -173,12 +181,15 @@ W = cell(trials,1); t = 1;
 for c = 1:1:batches
     labels_current = labels_IN(1+(c-1)*sub_batch:c*sub_batch,:);
     for frame_num = 1:1:sub_batch
-        r = randperm(V); inds = r(1:sub_V)';
+        r = randperm(V); 
+        inds = r(1:sub_V)';
         T_current = perm_tests(Data(:,inds),labels_current(frame_num,:),N_gp1);
         %
-        U_inds = U_hat(inds,:); [s, w, jnk] = admm_srp(U_inds, T_current', OPTS2);
+        U_inds = U_hat(inds,:);
+        [s, w, jnk] = admm_srp(U_inds, T_current', OPTS2);
         %
-        W{t,1} = w; t = t + 1;
+        W{t,1} = w; 
+        t = t + 1;
         s_all = zeros(V,1); s_all(inds) = s_all(inds) + s; 
         T_rec = U_hat*w + s_all + mu_fit;
         %

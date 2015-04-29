@@ -47,11 +47,12 @@ arma::mat perm_tests(arma::mat data, arma::mat labels, int N_group1)
 {
 
 	/* N x V matrix*/
-	int N = data.n_rows;
+	int N = data.n_rows; 
+	int num_permutations = labels.n_rows;
 	arma::mat T = arma::zeros(labels.n_rows, data.n_cols);
 
 
-	for(int i = 0;i < labels.n_rows ;i++ )
+	for(int i = 0;i < num_permutations ;i++ )
 	{
 		arma::urowvec label_j(1, N);
 		for(int j = 0; j < N; j++)
@@ -75,12 +76,11 @@ arma::mat gen_hist(arma::mat X, int numBins){
 /**
 * Saves matrices in armadillo format
 **/
-bool mat_to_arma(arma::mat truth_labels, arma::mat data){
+bool mat_to_arma(arma::mat matrix, std::string name){
 
-	truth_labels.save("/Users/felipegb94/repos/Efficient_PermutationTesting/Efficient_PT/pt_data/truth_labels_merit_arma.mat");
-	data.save("/Users/felipegb94/repos/Efficient_PermutationTesting/Efficient_PT/pt_data/data_merit_arma.mat");
+	std::string filename = "/Users/felipegb94/repos/Efficient_PermutationTesting/Efficient_PT/Recovery_Inputs/" + name + "_arma.mat";
+	return matrix.save("/Users/felipegb94/repos/Efficient_PermutationTesting/Efficient_PT/Recovery_Inputs/samplename.mat");
 
-	return 1;
 }
 
 arma::mat interval(double start, double end, double delta, bool isRow){
@@ -106,6 +106,81 @@ arma::mat interval(double start, double end, double delta, bool isRow){
 	return in;
 
 }
+arma::mat shrinkage_max(const arma::mat & a)
+{
+    arma::mat b(a.n_rows,a.n_cols);
+    b.zeros();    
+    for (int i=0; i<a.n_rows; i++)
+    {
+        if (a(i,0)>0) b(i,0)=a(i,0);
+    }
+    return b;
+};
+
+arma::mat shrinkage(const arma::mat &a, double kappa)
+{
+    arma::mat y;
+    
+    // as arma::matlab :y = max(0, a-kappa) - max(0, -a-kappa);
+    y= shrinkage_max( a-kappa) - shrinkage_max(-a-kappa);
+    
+    return y;
+}
+
+/**Solves the following problem via ADMM:
+% 
+%   minimize     ||s||_1
+%   subject to   Uw + s - v = 0
+*/
+void admm_srp(arma::mat U, 
+		      arma::mat v, 
+			  int rho, double tol, int max_iter,
+			  arma::mat& s,
+			  arma::mat& w,
+			  arma::mat& y)
+{
+
+	// Data preprocessing
+	int m = U.n_rows;
+	int n = U.n_cols;
+
+	w = arma::zeros(n, 1);
+	s = arma::zeros(m, 1);
+	y = arma::zeros(m, 1);
+
+	double mu = 1.25 / arma::norm(v);
+
+	// precompute static variables for a-update (projection on to Ua=v-s)
+	arma::mat P = solve((U.t() * U), U.t());
+
+	bool converge = false;
+	int iter = 0;
+
+	while((!converge) && (iter <= max_iter)){
+
+		iter++;
+		//Update w
+    	w = P * ((v) - (s) - (y/mu));
+    	//Update s
+    	arma::mat Uw = U*w;
+    	s = shrinkage( (v) - (Uw) - (y/mu), 1/mu);  
+
+    	// y update
+    	arma::mat h = (Uw) + (s) - (v);
+    	y = (y) + (mu * h);
+
+    	mu = rho * mu; 
+
+    	// diagnostics, reporting, termination checks
+    
+    	if (norm(h) < tol)
+    	{
+        	converge = true;    
+    	}
+    	
+	}
+
+}
 
 int main()
 {
@@ -116,6 +191,16 @@ int main()
 
   	arma::mat truth_labels;
   	arma::mat data;
+
+  	int N; // Number of patients/instances
+  	int V; // Number of voxels per patient
+   	int max_rank; // Rank for estimating the low rank subspace
+  	double sub = 0.05; // Sampling Rate
+  	int T = pow(10,4); //Number of Permutations
+  	int train_time = 100; // Number of Permutations for training
+  	int max_cycles = 3; // Number of cycles for training
+  	int iter = 30; // Number of iterations for training
+  	int trials = T;
 
   	/**
   	t_mat = clock();
@@ -135,15 +220,7 @@ int main()
 	t_arma = clock() - t_arma;
 
   	std::cout << "It took me " << t_arma << " clicks ("<< ((float)t_arma)/CLOCKS_PER_SEC << " seconds) to load armadillo matrices." << std::endl;
-  	int N; // Number of patients/instances
-  	int V; // Number of voxels per patient
-   	int max_rank; // Rank for estimating the low rank subspace
-  	double sub = 0.05; // Sampling Rate
-  	int T = pow(10,4); //Number of Permutations
-  	int train_time = 100; // Number of Permutations for training
-  	int max_cycles = 3; // Number of cycles for training
-  	int iter = 30; // Number of iterations for training
-  	int trials = T;
+
 
 	if(status1 == true && status2 == true)
   	{
@@ -186,7 +263,7 @@ int main()
   	arma::mat T_bins = interval(start, end, bin_res, true);
 
 
-  	int sub_V = round(sub*V); // Number of samples used per permuttion
+  	int sub_V = round(sub * V); // Number of samples used per permuttion
   	int sub_batch = train_time; // number of permutationshandled at once -- for commputational ease
   	int batches = ceil(trials/sub_batch); // number of such batches
   	arma::mat max_batches = arma::zeros(1, trials);
@@ -196,7 +273,8 @@ int main()
 
 	std::cout << "Finish Initializing Variables ...." << std::endl;
 	std::cout << "Running Efficient Permutation Testing...." << std::endl;
-
+	// TRAINING
+	/*
 	arma::mat labels_current = labels_IN(arma::span(0, train_time-1), arma::span::all);
 	std::cout << "rows: " << labels_current.n_rows << std::endl;  // .n_rows and .n_cols are read only
 	std::cout << "cols: " << labels_current.n_cols << std::endl;
@@ -222,9 +300,89 @@ int main()
   	arma::mat X = arma::randn(V, max_rank);
   	arma::svd_econ(U_hat, s, R,  X);
 
-  	// arma::mat U_hat = arma
+  	arma::mat V_interval = interval(0, V-1, 1, true);
 
-  	// U_hat = orth(randn(V,OPTIONS.RANK)); 
+  	for(int m = 0; i < max_cycles;m++)
+  	{
+  		for(int f = 0; f < train_time; f++)
+  		{
+  			arma::mat r = arma::shuffle(V_interval);
+  			arma::mat inds = r(0, arma::span(0, sub_V-1));
+
+
+
+  		}
+
+  	}
+  	*/
+	std::cout << "Running Recovery...." << std::endl;
+	std::cout << "Loading Recovery variables...." << std::endl;
+
+	arma::mat U_hat;
+	arma::mat T_current;
+
+	bool status_U = U_hat.load("/Users/felipegb94/repos/Efficient_PermutationTesting/Recovery_Inputs/U_hat_merit_arma.mat");
+	//U_hat.save("/Users/felipegb94/repos/Efficient_PermutationTesting/Recovery_Inputs/U_hat_merit_arma.mat", arma::arma_binary);
+	bool status_T = T_current.load("/Users/felipegb94/repos/Efficient_PermutationTesting/Recovery_Inputs/T_current_merit_arma.mat");
+	//T_current.save("/Users/felipegb94/repos/Efficient_PermutationTesting/Recovery_Inputs/T_current_merit_arma.mat", arma::arma_binary);
+	bool status_labels = labels_IN.load("/Users/felipegb94/repos/Efficient_PermutationTesting/Recovery_Inputs/labels_IN_merit_arma.mat");
+	//labels_IN.save("/Users/felipegb94/repos/Efficient_PermutationTesting/Recovery_Inputs/labels_IN_merit_arma.mat", arma::arma_binary);
+
+	arma::mat W = arma::zeros(data.n_rows, trials);
+	int t = 0;
+  	arma::mat V_interval = interval(0, V-1, 1, true);
+
+  	int rho = 2;
+  	int max_iter = iter;
+  	double tol = pow(1, -8);
+
+	for(int c = 0; c < batches; c++)
+	{
+		arma::mat labels_current = labels_IN(arma::span((c)*sub_batch, ((c+1)*sub_batch) - 1), arma::span::all);
+
+		for(int frame_num = 0; frame_num < sub_batch; frame_num++)
+		{
+  			arma::mat r = arma::shuffle(V_interval);
+			arma::uvec inds(sub_V); // uvec is a vector of indeces
+
+			for(int i = 0; i < sub_V; i++)
+			{
+				inds(i) = r(0, i);
+			}
+			arma::mat data_curr = data.cols(inds);
+
+
+			T_current = perm_tests(data_curr, labels_current(frame_num, arma::span::all), N_group1);
+			arma::mat U_inds = U_hat.rows(inds);
+
+			std::cout << U_inds.n_rows << std::endl;
+			std::cout << U_inds.n_cols << std::endl;
+
+			arma::mat s;
+			arma::mat w;
+			arma::mat junk;
+
+			// Pass in references of s and w
+			admm_srp(U_inds, T_current.t(), rho, tol, max_iter, s, w, junk);
+
+			W.col(t) = w;
+			t++;
+
+			arma::mat s_all = arma::zeros(V, 1);
+			s_all.rows(inds) = s_all.rows(inds) + s; // AWESOME ARMADILLO
+			arma::mat T_rec = (U_hat*w) + (s_all) + (mu_fit);
+        //T_rec = U_hat*w + s_all + mu_fit;
+
+
+
+
+			std::cout << "Completion done on trial " << ((c)*sub_batch) + frame_num << "/" << trials << " block = " << c << std::endl;
+   
+
+		}
+
+	}
+
 
 
 

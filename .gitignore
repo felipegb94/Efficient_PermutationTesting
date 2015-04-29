@@ -1,3 +1,5 @@
+*.sublime*
+Recovery_Inputs/
 outputs/
 Efficient_PT/pt_data/
 build/
