@@ -153,7 +153,7 @@ for m = 1:1:maxCycles
         r = randperm(V); inds = r(1:sub_V)'; %left_inds = setdiff(1:1:V,inds);
         I_inds = Ts_ac(inds,f);
         %
-        [s, w, jnk] = admm_srp(U_hat(inds,:), I_inds, OPTS2); 
+        [s, w, jnk] = mex_srp(U_hat(inds,:), I_inds, OPTS2); 
         sall = zeros(V,1); sall(inds) = s; 
         Ts_tr(:,f) = (U_hat*w + sall)';
         fprintf('Training done on %s cycle with %s frame \n',num2str(m),num2str(f));
@@ -187,7 +187,7 @@ for c = 1:1:batches
         T_current = perm_tests(Data(:,inds),labels_current(frame_num,:),N_gp1);
         %
         U_inds = U_hat(inds,:);
-        [s, w, jnk] = admm_srp(U_inds, T_current', OPTS2);
+        [s, w, jnk] = mex_srp(U_inds, T_current', OPTS2);
         %
         W{t,1} = w; 
         t = t + 1;

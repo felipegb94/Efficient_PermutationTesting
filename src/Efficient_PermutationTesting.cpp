@@ -188,6 +188,7 @@ int main()
   	// clock_t t_mat;
   	clock_t t_arma;
   	clock_t t_tstat;
+  	clock_t t_recovery;
 
   	arma::mat truth_labels;
   	arma::mat data;
@@ -338,6 +339,14 @@ int main()
   	int rho = 2;
   	int max_iter = iter;
   	double tol = pow(1, -8);
+  	int counter = 0;
+
+	float perm_test_times[10000]; 
+	float admm_srp_times[10000]; 
+
+	t_recovery = clock();
+	clock_t t_perm_test;
+	clock_t	t_admm_srp;
 
 	for(int c = 0; c < batches; c++)
 	{
@@ -354,19 +363,22 @@ int main()
 			}
 			arma::mat data_curr = data.cols(inds);
 
-
+			t_perm_test = clock();
 			T_current = perm_tests(data_curr, labels_current(frame_num, arma::span::all), N_group1);
-			arma::mat U_inds = U_hat.rows(inds);
+			t_perm_test = clock() - t_perm_test;
+			perm_test_times[counter] = float(t_perm_test)/CLOCKS_PER_SEC;
 
-			std::cout << U_inds.n_rows << std::endl;
-			std::cout << U_inds.n_cols << std::endl;
+			arma::mat U_inds = U_hat.rows(inds);
 
 			arma::mat s;
 			arma::mat w;
 			arma::mat junk;
 
 			// Pass in references of s and w
+			t_admm_srp = clock();
 			admm_srp(U_inds, T_current.t(), rho, tol, max_iter, s, w, junk);
+			t_admm_srp = clock() - t_admm_srp;
+			admm_srp_times[counter] = float(t_admm_srp)/CLOCKS_PER_SEC;
 
 			W.col(t) = w;
 			t++;
@@ -376,17 +388,28 @@ int main()
 
 			s_all.each_row() += mu_fit;
 			arma::mat T_rec = (U_hat*w) + (s_all);
-			
+
        		max_batches(0,(c)*sub_batch) = T_rec.max();
 
-			std::cout << "Completion done on trial " << ((c)*sub_batch) + frame_num << "/" << trials << " block = " << c << std::endl;
-   
+			//std::cout << "Completion done on trial " << ((c)*sub_batch) + frame_num << "/" << trials << " block = " << c << std::endl;
+   			//std::cout << "iteration number: " << counter << std::endl;
+   			counter++;
 
 		}
 
 	}
+	t_recovery = clock() - t_recovery;
 
+  	std::cout << "It took me " << t_recovery << " clicks ("<< ((float)t_recovery)/CLOCKS_PER_SEC << " seconds) to do the recovery of W" << std::endl;
 
+  	float sum_perm_time = 0;
+  	float sum_admm_time = 0;
+  	for(int i = 0; i < 10000; i++){
+  		sum_perm_time += perm_test_times[i]; 		
+  		sum_admm_time += admm_srp_times[i];
+  	}
+  	std::cout << "average of permutation times per iteration = " <<  sum_perm_time/10000 << std::endl;
+  	std::cout << "average of admm_srp times per iteration = " <<  sum_admm_time/10000 << std::endl;
 
 
 
