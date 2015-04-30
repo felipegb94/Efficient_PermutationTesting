@@ -119,6 +119,7 @@ t_train_perm_test_100 = tic;
 T_current = perm_tests(Data,labels_current,N_gp1);
 t_train_perm_test_100 = toc(t_train_perm_test_100);
 save('./timings/t_train_perm_test_100.mat', 't_train_perm_test_100');
+timings.t_train_perm_test_100 = t_train_perm_test_100;
 
 %
 frames_order = zeros(train_num,maxCycles);
@@ -158,6 +159,7 @@ end
 
 t_Training = toc(t_Training);
 save('./timings/t_Training', 't_Training');
+timings.t_Training = t_Training;
 
 
 %% Recovery : Filling in W and residuals for all trials
@@ -205,10 +207,15 @@ for c = 1:1:batches
     end
 end
 t_Recovery = toc(t_Recovery);
+outputs.maxnull = gen_hist(max_batches,T_bins); 
+
 save('./timings/t_Recovery', 't_Recovery');
+timings.t_Recovery = t_Recovery;
 
 average_perm_time = mean(perm_times);
 average_srp_time = mean(srp_times);
+timings.average_perm_time = average_perm_time;
+timings.average_srp_time = average_srp_time;
 
 save('./timings/average_perm_time.mat', 'average_perm_time');
 save('./timings/average_srp_time.mat', 'average_srp_time');
@@ -216,10 +223,7 @@ save('./timings/average_srp_time.mat', 'average_srp_time');
 fprintf('Average perm_time = %d \n', average_perm_time);
 fprintf('Average srp_time = %d \n', average_srp_time);
 
-t_Total = toc(t_Total);
-save('./timings/t_Total', 't_Total');
 
-outputs.maxnull = gen_hist(max_batches,T_bins); 
 if inputs.writing == 1 
     outputs.U = U_hat; 
     outputs.W = W; 
@@ -227,5 +231,12 @@ end
 %
 save(sprintf('%s/outputs.mat',save_path), 'outputs');
 fprintf('\n Outputs saved to output.mat .. DONE \n');
+
+t_Total = toc(t_Total);
+timings.t_Total = t_Total;
+
+save('./timings/t_Total', 't_Total');
+save('./timings/timings_run1.mat', 'timings');
+
 
 %% END
