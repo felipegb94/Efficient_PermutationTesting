@@ -4,3 +4,8 @@ outputs/
 Efficient_PT/pt_data/
 build/
 src/armadillo/
+pt_data/Data_adrc.mat
+pt_data/Data_merit.mat
+pt_data/Data_predict.mat
+pt_data/pt_arma_data/data_merit_arma.mat
+pt_data/pt_arma_data/truth_merit_arma.mat

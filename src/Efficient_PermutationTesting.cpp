@@ -4,20 +4,6 @@
 #include <armadillo>
 #include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
 
-
-
-// function T = perm_tests(data,labels,n1)
-
-// T = zeros(size(labels,1),size(data,2));
-// for i = 1:1:size(labels,1)
-//     label_i = labels(i,:);
-//     [junk1 junk2 junk3 stats] = ...
-//         ttest2(data(label_i(1:n1), :), data(label_i(1+n1:end), :), 0.05, 'both', 'unequal');
-//     T(i,:) = stats.tstat;
-// end
-
-// end
-
 arma::mat ttest2(arma::mat group1, arma::mat group2, double sig_lvl){
 
 	int n = group1.n_rows;
@@ -33,12 +19,6 @@ arma::mat ttest2(arma::mat group1, arma::mat group2, double sig_lvl){
 	arma::mat denominator = sqrt( (group1_var / n) + (group2_var / m) );
 
 	arma::mat t_stat = mean_difference / denominator;
-	// std::cout << "rows: " << denominator.n_rows <<  std::endl;
-	// 	std::cout << "cols: " << denominator.n_cols <<  std::endl;
-
-	// std::cout << "group 1 stdev: " << group1_stdev(0,0) << std::endl;  // .n_rows and .n_cols are read only
-	// std::cout << "group 1 stdev2: " << group1_stdev2(0,0) << std::endl;  // .n_rows and .n_cols are read only
-	// std::cout << "group 1 var: " << group1_var(0,0) << std::endl;  // .n_rows and .n_cols are read only
 
 	return t_stat;
 }
@@ -275,19 +255,19 @@ int main()
 	std::cout << "Finish Initializing Variables ...." << std::endl;
 	std::cout << "Running Efficient Permutation Testing...." << std::endl;
 	// TRAINING
-	/*
+	
 	arma::mat labels_current = labels_IN(arma::span(0, train_time-1), arma::span::all);
 	std::cout << "rows: " << labels_current.n_rows << std::endl;  // .n_rows and .n_cols are read only
 	std::cout << "cols: " << labels_current.n_cols << std::endl;
 
-	// t_tstat = clock();
-	// arma::mat T_current = perm_tests(data, labels_current, N_group1);
-	// t_tstat = clock() - t_tstat;
-	// std::cout << "rows T: " << T_current.n_rows << std::endl;  // .n_rows and .n_cols are read only
-	// std::cout << "cols T : " << T_current.n_cols << std::endl;
+	t_tstat = clock();
+	arma::mat T_current = perm_tests(data, labels_current, N_group1);
+	t_tstat = clock() - t_tstat;
+	std::cout << "rows T: " << T_current.n_rows << std::endl;  // .n_rows and .n_cols are read only
+	std::cout << "cols T : " << T_current.n_cols << std::endl;
 
- //  	std::cout << "It took me " << t_tstat << " clicks ("<< ((float)t_tstat)/CLOCKS_PER_SEC << " seconds) to do 100  permutations." << std::endl;
-
+ 	std::cout << "It took me " << t_tstat << " clicks ("<< ((float)t_tstat)/CLOCKS_PER_SEC << " seconds) to do 100  permutations." << std::endl;
+/*
   	arma::mat frames_order = arma::zeros(train_time, max_cycles);
   	arma::mat train_time_interval = interval(0, train_time-1, 1, false);
   	for(int i = 0; i < max_cycles; i++){
@@ -320,7 +300,6 @@ int main()
 	std::cout << "Loading Recovery variables...." << std::endl;
 
 	arma::mat U_hat;
-	arma::mat T_current;
 	arma::mat mu_fit;
 
 	bool status_U = U_hat.load("/Users/felipegb94/repos/Efficient_PermutationTesting/Recovery_Inputs/U_hat_merit_arma.mat");
@@ -350,7 +329,7 @@ int main()
 
 	for(int c = 0; c < batches; c++)
 	{
-		arma::mat labels_current = labels_IN(arma::span((c)*sub_batch, ((c+1)*sub_batch) - 1), arma::span::all);
+		labels_current = labels_IN(arma::span((c)*sub_batch, ((c+1)*sub_batch) - 1), arma::span::all);
 
 		for(int frame_num = 0; frame_num < sub_batch; frame_num++)
 		{
@@ -408,7 +387,7 @@ int main()
   		sum_perm_time += perm_test_times[i]; 		
   		sum_admm_time += admm_srp_times[i];
   	}
-  	std::cout << "average of permutation times per iteration = " <<  sum_perm_time/10000 << std::endl;
+  	std::cout << "average of permutation times per iteration for "<<T_current.n_cols<<" perms= " <<  sum_perm_time/10000 << std::endl;
   	std::cout << "average of admm_srp times per iteration = " <<  sum_admm_time/10000 << std::endl;
 
 
