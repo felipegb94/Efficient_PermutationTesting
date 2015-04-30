@@ -27,8 +27,29 @@ For my Computer Vision final project I will be cleaning up the code presented by
 For this setup I am assuming the Mac OSX machine have the package manager [homebrew] (http://brew.sh/) installed. I'm  using the CMake GUI so if you which need
 
 1. Install [cmake] (http://www.cmake.org/download/). Follow the instructions. 
+2. Install arpack and openblas with brew (INSTALL BEFORE ARMADILLO!!!):
+```
+brew install arpack
+brew install openblas
+```
 2. Install [armadillo] (http://arma.sourceforge.net/download.html#macos) (C++ linear algebra library): `brew install armadillo`
 3. Open the CMake GUI and set your source to `PATH_TO_Efficient_PERMUTATIONTESTING_FOLDER/src` and build directory to whichever directory you want the binaries to go to. Click on configure, and then generate.
+4. Run the following commands in matlab command line. Make sure that the path 
+```
+setenv('LAPACK_VERSION', '/PATH TO LAPACK OR ARPACK LIBRARY')
+setenv('BLAS_VERSION', '/usr/local/Cellar/openblas')
+```
+5. Compile mex files in both the `Efficient_PT/mex`  and `Efficient_PT/Grasta/mex`. Before compiling you will have to change in both mex_xxx.cpp the line below to wherever the armadillo.h or armadillo library is.: 
+```
+#include "/usr/bin/armadillo
+```
+
+
+
+
+#### Remarks of matlab2014 in macosx
+1. Compile
+
 
 ### Theory
 In this section I will first explain what Multiple Hypothesis Testing is and how it fits in the context of neuroimaging. Then I will introduct the two existing techniques that are used to perform  Multiple Hypothesis Testing (The Bonferroni Correction and Permutation Testing) and why it does not make sense to use the Bonferroni Correction in the problem we are trying to solve. Thirdly, I will outline the problems faced when trying to perform Permutation Testing. Finally I will introduce the idea behind Efficient Permutation Testing and how this new algorithm overcomes some of the problems that come together with the usual Permutation Testing algorithm. 
@@ -69,4 +90,6 @@ Permutation Testing and the Bonferroni Correction are the two most well known me
 
 [http://www.stat.berkeley.edu/~mgoldman/Section0402.pdf]
 [http://www.gs.washington.edu/academics/courses/akey/56008/lecture/lecture10.pdf]
+
+
 
