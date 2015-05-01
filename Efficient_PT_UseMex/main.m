@@ -25,7 +25,7 @@ trainTimeVal = {100}; % Number of permutations for training.
 maxCyclesVal = {3}; % Number of cycles for training.
 iterVal = {30}; % Number of iterations for matrix completion.
 writingVal = {1}; % 0 if only output maxnull or 1 if outputs maxnull, U and W
-saveVal = {'/Users/felipegb94/repos/Efficient_PermutationTesting/Efficient_PT_Original/outputs/'}; % Path to save outputs
+saveVal = {'/Users/felipegb94/repos/Efficient_PermutationTesting/Efficient_PT_UseMex/outputs/'}; % Path to save outputs
 
 inputs = struct(datapath, datapathVal,...
                 sub, subVal,...

@@ -244,7 +244,7 @@ fprintf('\n Outputs saved to output.mat .. DONE \n');
 t_Total = toc(t_Total);
 timings.t_Total = t_Total;
 save('./timings/t_Total', 't_Total');
-save('./timings/timings_run1.mat', 'timings');
+save('./timings/timings_run3.mat', 'timings');
 
 
 

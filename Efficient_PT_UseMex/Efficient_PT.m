@@ -236,7 +236,7 @@ t_Total = toc(t_Total);
 timings.t_Total = t_Total;
 
 save('./timings/t_Total', 't_Total');
-save('./timings/timings_run1.mat', 'timings');
+save('./timings/timings_run2.mat', 'timings');
 
 
 %% END

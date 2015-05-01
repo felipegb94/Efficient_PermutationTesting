@@ -9,3 +9,9 @@ pt_data/Data_merit.mat
 pt_data/Data_predict.mat
 pt_data/pt_arma_data/data_merit_arma.mat
 pt_data/pt_arma_data/truth_merit_arma.mat
+KLDiv.m
+Efficient_PT_UseMex/timings/t_Recovery.mat
+Efficient_PT_UseMex/timings/t_Total.mat
+Efficient_PT_UseMex/timings/t_Training.mat
+Efficient_PT_UseMex/timings/t_train_perm_test_100.mat
+t_Total.mat

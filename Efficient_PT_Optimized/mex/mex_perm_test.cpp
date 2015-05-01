@@ -12,8 +12,8 @@ arma::mat ttest2(arma::mat group1, arma::mat group2, double sig_lvl)
 	arma::mat tstat = arma::zeros(1, group1.n_cols);
 	arma::mat group1_mean = arma::mean(group1); // 1 x Voxels vector
 	arma::mat group2_mean = arma::mean(group2); // 1 x Voxels vector
-	arma::mat group1_var = arma::stddev(group1); // 1 x Voxels vector
-	arma::mat group2_var = arma::stddev(group2); // 1 x Voxels vector
+	arma::mat group1_var = arma::var(group1); // 1 x Voxels vector
+	arma::mat group2_var = arma::var(group2); // 1 x Voxels vector
 
 	arma::mat mean_difference = group1_mean	- group2_mean;
 	arma::mat denominator = sqrt( (group1_var / n) + (group2_var / m) );
@@ -96,7 +96,6 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
     // Get N_group1_in info
     int N_group1 = mxGetScalar(prhs[2]);
-    mexPrintf("N_group1 = %d \n", N_group1);
 
     // Allocate memory for data_in
     arma::mat data(rows_data_in, cols_data_in);
