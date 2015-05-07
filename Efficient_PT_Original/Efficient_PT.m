@@ -223,6 +223,7 @@ save('./timings/average_srp_time.mat', 'average_srp_time');
 fprintf('Average perm_time = %d \n', average_perm_time);
 fprintf('Average srp_time = %d \n', average_srp_time);
 
+outputs.maxT = max_batches;
 
 
 if inputs.writing == 1 
@@ -230,7 +231,7 @@ if inputs.writing == 1
     outputs.W = W; 
 end
 %
-save(sprintf('%s/outputs.mat',save_path), 'outputs');
+save(sprintf('%s/outputs_adrc.mat',save_path), 'outputs');
 fprintf('\n Outputs saved to output.mat .. DONE \n');
 
 t_Total = toc(t_Total);

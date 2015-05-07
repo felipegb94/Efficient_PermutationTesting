@@ -1,7 +1,7 @@
 % Possible matrices: adrc, merit, predict
 % These contain an N x V matrix (data) and a 1xN Label Vector
 matrixName = 'adrc'; 
-load(strcat('../pt_data/Data_', matrixName, '.mat'));
+load(strcat('../niis/Data_', matrixName, '.mat'));
 
 % N = Number of patients. ~ 50 
 % V = Number of Voxels. On the order of 10^6.
@@ -17,7 +17,7 @@ iter = 'iter';
 writing = 'writing';
 save = 'save';
 
-datapathVal = {strcat('../pt_data/Data_', matrixName, '.mat')};
+datapathVal = {strcat('../niis/Data_', matrixName, '.mat')};
 subVal = {0.05};  % Sampling Rate
 TVal = {10^4}; % Number of Permutations.
 maxRankVal = {N}; % Rank for estimating the low rank subspace

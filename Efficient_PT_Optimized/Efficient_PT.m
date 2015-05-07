@@ -49,6 +49,8 @@
 function outputs = Efficient_PT(inputs)
 
 %% checking for correct inputs (assigning defaults for left out ones)
+fprintf('\n Running Efficient_PT modified version \n');
+
 fprintf('\n Checking for correct inputs \n');
 t_Total = tic;
 %
@@ -228,6 +230,7 @@ save('./timings/average_srp_time.mat', 'average_srp_time');
 fprintf('Average perm_time = %d \n', average_perm_time);
 fprintf('Average admm_time = %d \n', average_srp_time);
 
+outputs.maxT = max_batches;
 
 
 %%%%
@@ -244,7 +247,7 @@ fprintf('\n Outputs saved to output.mat .. DONE \n');
 t_Total = toc(t_Total);
 timings.t_Total = t_Total;
 save('./timings/t_Total', 't_Total');
-save('./timings/timings_run3.mat', 'timings');
+save('./timings/timings_run4.mat', 'timings');
 
 
 

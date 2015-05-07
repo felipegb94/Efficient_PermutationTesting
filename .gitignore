@@ -1,4 +1,7 @@
 *.sublime*
+kldiv2.m
+nifti/
+niis/
 Recovery_Inputs/
 outputs/
 Efficient_PT/pt_data/
@@ -15,3 +18,10 @@ Efficient_PT_UseMex/timings/t_Total.mat
 Efficient_PT_UseMex/timings/t_Training.mat
 Efficient_PT_UseMex/timings/t_train_perm_test_100.mat
 t_Total.mat
+face_rfx/
+PET_motor/
+Final_Report/
+analysis/
+analysis_adrc/
+analysis_efficientPT/
+references/
